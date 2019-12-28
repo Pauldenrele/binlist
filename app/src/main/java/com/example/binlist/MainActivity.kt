@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.binlist.Model.Numbre
 import com.example.binlist.Model.Scheme
+import com.example.binlist.Model.brand
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -61,12 +63,46 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<Scheme>, response: Response<Scheme>) {
                   val sub = response.body()
-                txt_search_bank.text = "${sub!!.scheme}"
+                txt_search_scheme.text = "${sub!!.scheme}"
                 Toast.makeText(this@MainActivity , " response ${sub!!.scheme}" , Toast.LENGTH_LONG).show()
 
             }
 
         })
+
+
+
+        ApiServe.getBrand("https://lookup.binlist.net/${searchString}").enqueue(object :Callback<brand>{
+            override fun onFailure(call: Call<brand>, t: Throwable) {
+                Toast.makeText(this@MainActivity , "Failed" , Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<brand>, response: Response<brand>) {
+                val sub = response.body()
+                txt_search_brand.text = "${sub!!.brand}"
+                Toast.makeText(this@MainActivity , " brand ${sub!!.brand}" , Toast.LENGTH_LONG).show()
+
+            }
+
+        })
+
+
+
+        ApiServe.getNumbre("https://lookup.binlist.net/${searchString}").enqueue(object :Callback<Numbre>{
+            override fun onFailure(call: Call<Numbre>, t: Throwable) {
+                Toast.makeText(this@MainActivity , "Failed" , Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<Numbre>, response: Response<Numbre>) {
+                val sub = response.body()
+                txt_search_number.text = "${sub!!.length}"
+                txt_search_luhn.text = "${sub!!.luhn}"
+                Toast.makeText(this@MainActivity , " brand ${sub!!.length}" , Toast.LENGTH_LONG).show()
+
+            }
+
+        })
+
 
 
     }

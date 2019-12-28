@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.binlist.Model.Posts
+import com.example.binlist.Model.Scheme
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -54,16 +54,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadData(searchString: String) {
-        ApiServe.getScheme("https://lookup.binlist.net/${searchString}").enqueue(object :Callback<Posts.Scheme>{
-            override fun onFailure(call: Call<Posts.Scheme>, t: Throwable) {
-               // Log.v("faiiii" , t.message)
-
-                Toast.makeText(this@MainActivity , "kom" , Toast.LENGTH_LONG).show()
+        ApiServe.getScheme("https://lookup.binlist.net/${searchString}").enqueue(object :Callback<Scheme>{
+            override fun onFailure(call: Call<Scheme>, t: Throwable) {
+                Toast.makeText(this@MainActivity , "Failed" , Toast.LENGTH_LONG).show()
             }
 
-            override fun onResponse(call: Call<Posts.Scheme>, response: Response<Posts.Scheme>) {
-                Log.v("respooo" , response.message())
-                Toast.makeText(this@MainActivity , " yesss ${response.isSuccessful}" , Toast.LENGTH_LONG).show()
+            override fun onResponse(call: Call<Scheme>, response: Response<Scheme>) {
+                  val sub = response.body()
+                txt_search_bank.text = "${sub!!.scheme}"
+                Toast.makeText(this@MainActivity , " response ${sub!!.scheme}" , Toast.LENGTH_LONG).show()
 
             }
 
